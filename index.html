@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百家樂三珠路計算器 (實戰除錯版)</title>
+    <title>葉漢上身保佑我</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; background-color: #f4f7f6; }
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
         .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
         button { padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border: 1px solid #ccc; border-radius: 8px; flex: 1; transition: 0.2s; }
         button:active { transform: scale(0.98); }
@@ -183,7 +183,6 @@
             const totalCombos = comboPass + comboFail;
             const winRate2Val = totalCombos > 0 ? (comboPass / totalCombos) : 0;
             
-            // 修復Bug：如果 totalCombos 是 0，也要放行舒適區
             const isComfortZoneSafe = (winRate2Val >= 0.5 || totalCombos === 0);
             
             if (chunks.length < 4) {
@@ -208,13 +207,11 @@
                 const h2 = validData[validData.length - 1];
                 let comfortSuggestion = "";
                 
-                // A區：殺長連 (死穴代碼 1)
                 if (h1 === h2 && stats[1] === 0 && isComfortZoneSafe) {
                     const target = h2 === 'B' ? 'P' : 'B';
                     const targetStr = target === 'B' ? '莊 (B)' : '閒 (P)';
                     comfortSuggestion = `<div class="comfort-box">🛡️ 第三口舒適區：下注 ${targetStr}<br><small>原因：三連(1)為盲門，此列斷連機率高</small></div>`;
                 }
-                // B區：殺單跳 (死穴代碼 4)
                 else if (h1 !== h2 && stats[4] === 0 && isComfortZoneSafe) {
                     const target = h2 === 'B' ? 'B' : 'P';
                     const targetStr = target === 'B' ? '莊 (B)' : '閒 (P)';
@@ -234,173 +231,6 @@
                                         <div class="backtest-box">
                                             <div>📍 <b>只打第二口：</b> ${simWins}勝 ${simLosses}負 (${winRate1})</div>
                                             <div>⚠️ <b>打二三口(負追)：</b> ${comboPass}過關 <span style="color:#d9534f; font-weight:bold;">${comboFail}破列</span> (${winRate2})</div>
-                                        </div>`;
-        }
-    </script>
-</body>
-</html>
-        <h3 style="color: #444; margin-bottom: 10px;">珠盤路 (確認輸入)：</h3>
-        <div id="beadPlate" class="bead-plate"></div>
-    </div>
-
-    <div class="suggestion-box" id="suggestionArea">策略提示：資料不足。</div>
-
-    <div class="result-box" id="resultArea">統計資料在此顯示。</div>
-
-    <script>
-        let historyData = [];
-        const codes = { 'BBB': 1, 'PPP': 1, 'BBP': 2, 'PPB': 2, 'BPP': 3, 'PBB': 3, 'BPB': 4, 'PBP': 4 };
-        const patternMap = { 1: ['BBB', 'PPP'], 2: ['BBP', 'PPB'], 3: ['BPP', 'PBB'], 4: ['BPB', 'PBP'] };
-
-        function addRecord(type) { historyData.push(type); updateUI(); }
-        function undo() { if (historyData.length > 0) { historyData.pop(); updateUI(); } }
-        function clearAll() { historyData = []; updateUI(); }
-
-        // 優化後的平手突破邏輯
-        function getTopTrend(trendStatsObj, lastCode) {
-            let maxVal = Math.max(...Object.values(trendStatsObj));
-            let candidates = Object.keys(trendStatsObj).filter(k => trendStatsObj[k] === maxVal);
-            if (candidates.length === 1) return candidates[0];
-            
-            // 優先抓取包含最新代碼的陣營
-            let preferred = candidates.find(c => c.includes(lastCode.toString()));
-            return preferred || candidates[0];
-        }
-
-        function updateUI() {
-            const beadPlate = document.getElementById('beadPlate');
-            beadPlate.innerHTML = historyData.map(item => `<div class="bead bead-${item}">${item === 'B' ? '莊' : item === 'P' ? '閒' : '和'}</div>`).join('');
-            beadPlate.scrollLeft = beadPlate.scrollWidth;
-
-            const validData = historyData.filter(item => item === 'B' || item === 'P');
-            let chunks = [];
-            for (let i = 0; i <= validData.length - 3; i += 3) {
-                chunks.push(validData[i] + validData[i+1] + validData[i+2]);
-            }
-
-            const resultArea = document.getElementById('resultArea');
-            const suggestionArea = document.getElementById('suggestionArea');
-
-            if (chunks.length === 0) {
-                resultArea.innerHTML = "<div style='text-align:center; color:#888;'>資料不足，請繼續輸入。</div>";
-                suggestionArea.innerHTML = "策略提示：資料收集中。";
-                return;
-            }
-
-            let stats = { 1: 0, 2: 0, 3: 0, 4: 0 };
-            chunks.forEach(chunk => { stats[codes[chunk]]++; });
-
-            let isBadStart = false;
-            if (chunks.length >= 4) {
-                let first4Codes = new Set();
-                for (let i = 0; i < 4; i++) { first4Codes.add(codes[chunks[i]]); }
-                if (first4Codes.size === 4) isBadStart = true;
-            }
-
-            // 合併反式與跳式，解決重疊Bug
-            const trendStats = {
-                '正式 (1,2,4)': stats[1] + stats[2] + stats[4],
-                '反/跳式 (2,3,4)': stats[2] + stats[3] + stats[4],
-                '連式 (1,2,3)': stats[1] + stats[2] + stats[3]
-            };
-            
-            let lastCodeStr = chunks[chunks.length - 1];
-            let lastCode = codes[lastCodeStr];
-            const topTrend = getTopTrend(trendStats, lastCode);
-
-            let isTrendChanging = false;
-            let recentTopTrend = "";
-            
-            if (chunks.length >= 5) {
-                let recentChunks = chunks.slice(-3);
-                let rStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
-                recentChunks.forEach(chunk => { rStats[codes[chunk]]++; });
-                let rTrendStats = {
-                    '正式 (1,2,4)': rStats[1] + rStats[2] + rStats[4],
-                    '反/跳式 (2,3,4)': rStats[2] + rStats[3] + rStats[4],
-                    '連式 (1,2,3)': rStats[1] + rStats[2] + rStats[3]
-                };
-                let rLastCode = codes[recentChunks[recentChunks.length - 1]];
-                recentTopTrend = getTopTrend(rTrendStats, rLastCode);
-                
-                if (recentTopTrend !== topTrend) isTrendChanging = true;
-            }
-
-            const maxCount = Math.max(...Object.values(stats));
-            const wangMen = Object.keys(stats).filter(k => stats[k] === maxCount && maxCount > 0);
-
-            let html = `<div style="font-size:16px; margin-bottom:10px;">有效組數：<b>${chunks.length}</b> 組</div>`;
-            html += `<div class="stats-grid">
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">1</div><div class="stat-name">三連</div></div><div class="stat-value">${stats[1]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">2</div><div class="stat-name">兩連一跳</div></div><div class="stat-value">${stats[2]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">3</div><div class="stat-name">一跳兩連</div></div><div class="stat-value">${stats[3]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">4</div><div class="stat-name">單跳</div></div><div class="stat-value">${stats[4]} 次</div></div>
-                     </div>`;
-                     
-            html += `<div class="trend-box"><div style="margin-bottom:8px;"><b>趨勢大勢：</b></div>`;
-            for (let t in trendStats) { 
-                let isTop = (t === topTrend) ? "font-weight:bold; color:#d9534f;" : "";
-                html += `<div style="display:flex; justify-content:space-between; color:#555; ${isTop}"><span>${t}</span><span>${trendStats[t]} 次</span></div>`; 
-            }
-            html += `<hr style="border:0; border-top:1px solid #ccc; margin:10px 0;">`;
-            html += `<div><b>全局最強趨勢：</b> <span class="highlight">${topTrend}</span></div>`;
-            if (isTrendChanging) html += `<div style="margin-top:5px;"><span class="warning" style="font-size:14px; padding:3px 6px;">近3組急轉為：${recentTopTrend}</span></div>`;
-            html += `</div>`;
-            resultArea.innerHTML = html;
-
-            let simWins = 0, simLosses = 0;
-            for (let i = 3; i < chunks.length; i++) {
-                let pStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
-                for (let j = 0; j < i; j++) pStats[codes[chunks[j]]]++;
-                let pMax = Math.max(...Object.values(pStats));
-                let pWang = Object.keys(pStats).filter(k => pStats[k] === pMax);
-                let h1 = chunks[i][0], actualH2 = chunks[i][1], possible = new Set();
-                pWang.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
-                if (possible.size === 1) {
-                    if (Array.from(possible)[0] === actualH2) simWins++; else simLosses++;
-                }
-            }
-
-            const remainder = validData.length % 3;
-            let suggestion = "";
-            
-            if (chunks.length < 4) {
-                suggestion = `資料收集中 (${chunks.length}/4 組)`;
-            } else if (isBadStart) {
-                suggestion = "<span class='warning'>⚠️ 前4組1~4皆已出現，開局混亂，建議離場</span>";
-            } else if (remainder === 1) {
-                if (isTrendChanging) {
-                    suggestion = "<span class='warning'>⚠️ 勢變發生，趨勢衝突，建議停注觀察</span>";
-                } else {
-                    const h1 = validData[validData.length - 1];
-                    let possible = new Set();
-                    wangMen.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
-                    
-                    if (possible.size === 1) {
-                        const side = Array.from(possible)[0];
-                        const sideStr = side === 'B' ? "<span style='color:#cc0000; font-size:24px;'>下注：莊 (B)</span>" : "<span style='color:#0055cc; font-size:24px;'>下注：閒 (P)</span>";
-                        const h1Str = h1 === 'B' ? '莊' : '閒';
-                        const targetStr = side === 'B' ? '莊' : '閒';
-                        
-                        suggestion = `${sideStr}
-                                      <div class="reason-box">
-                                          <b>💡 推導邏輯：</b><br>
-                                          目前全局主導為「<b>${topTrend}</b>」(旺門代碼 ${wangMen.join(', ')})。<br>
-                                          因本列第 1 口開出「<b>${h1Str}</b>」，為順應此趨勢規律，推導第 2 口須為「<b>${targetStr}</b>」。
-                                      </div>`;
-                    } else { 
-                        suggestion = "旺門方向衝突，觀察"; 
-                    }
-                }
-            } else {
-                suggestion = remainder === 0 ? "新列第 1 口，觀察" : "已過第二口，觀察";
-            }
-
-            const winRate = (simWins+simLosses) > 0 ? ((simWins/(simWins+simLosses))*100).toFixed(1)+"%" : "---";
-            suggestionArea.innerHTML = `<div style="margin-bottom:8px; color:#555; font-size:16px;">策略提示：</div>
-                                        <div>${suggestion}</div>
-                                        <div style="margin-top:12px; font-size:14px; font-weight:normal; color:#666; border-top:1px dashed #ccc; padding-top:10px;">
-                                            第二口勝率：${simWins}勝 ${simLosses}負 (${winRate})
                                         </div>`;
         }
     </script>
