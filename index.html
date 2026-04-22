@@ -3,69 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>葉漢上身保佑我</title>
+    <title>三珠路計算器</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        button { padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border: 1px solid #ccc; border-radius: 8px; flex: 1; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
-        .btn-b { background-color: #ffcccc; color: #cc0000; border-color: #ff9999; }
-        .btn-p { background-color: #cce5ff; color: #0055cc; border-color: #99ccff; }
-        .btn-t { background-color: #ccffcc; color: #008000; border-color: #99ff99; }
-        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; }
+        body { font-family: Arial, sans-serif; padding: 5px 10px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
         
-        .bead-plate-container { margin-bottom: 20px; }
+        .btn-group { display: flex; gap: 8px; margin-bottom: 10px; }
+        button { font-weight: bold; cursor: pointer; border: 1px solid #ccc; border-radius: 8px; flex: 1; transition: 0.2s; }
+        button:active { transform: scale(0.98); }
+        
+        .btn-b { background-color: #ffcccc; color: #cc0000; border-color: #ff9999; padding: 22px 10px; font-size: 22px; }
+        .btn-p { background-color: #cce5ff; color: #0055cc; border-color: #99ccff; padding: 22px 10px; font-size: 22px; }
+        .btn-t { background-color: #ccffcc; color: #008000; border-color: #99ff99; padding: 22px 10px; font-size: 20px; }
+        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; padding: 12px; font-size: 15px; }
+        
+        .bead-plate-container { margin-bottom: 10px; }
         .bead-plate {
-            display: grid; grid-template-rows: repeat(6, 35px); grid-auto-columns: 35px;
+            display: grid; grid-template-rows: repeat(6, 30px); grid-auto-columns: 30px;
             grid-auto-flow: column; gap: 2px; overflow-x: auto; border: 1px solid #bbb;
-            padding: 8px; background: #fff; min-height: 226px; border-radius: 8px; box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            padding: 5px; background: #fff; min-height: 194px; border-radius: 8px; box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
         }
-        .bead { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: bold; box-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .bead { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; }
         .bead-B { background-color: #d9534f; }
         .bead-P { background-color: #0275d8; }
         .bead-T { background-color: #5cb85c; }
 
-        .result-box { background-color: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 8px; line-height: 1.6; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .suggestion-box { background-color: #fffbc8; border: 2px solid #ffca28; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .suggestion-box { background-color: #fffbc8; border: 2px solid #ffca28; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 10px; }
+        .result-box { background-color: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; line-height: 1.4; margin-bottom: 10px; font-size: 14px; }
+        
         .highlight { font-weight: bold; color: #d9534f; }
-        .warning { color: white; background-color: #d9534f; padding: 5px 8px; border-radius: 5px; display: inline-block; margin-top: 5px; font-size: 16px;}
-        .trend-box { font-size: 14px; color: #333; background: #eef2f5; padding: 12px; border-radius: 8px; margin-top: 15px; border: 1px solid #d0d7de; }
+        .warning { color: white; background-color: #d9534f; padding: 2px 5px; border-radius: 4px; display: inline-block; font-size: 13px;}
+        .trend-box { font-size: 13px; color: #333; background: #eef2f5; padding: 8px; border-radius: 8px; margin-top: 8px; border: 1px solid #d0d7de; }
         
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .stat-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .stat-info { display: flex; align-items: center; gap: 8px; }
-        .stat-badge { background: #444; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
-        .stat-name { font-size: 13px; color: #666; }
-        .stat-value { font-size: 16px; font-weight: bold; color: #333; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
+        .stat-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px; display: flex; align-items: center; justify-content: space-between; }
+        .stat-info { display: flex; align-items: center; gap: 6px; }
+        .stat-badge { background: #444; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; }
+        .stat-name { font-size: 12px; color: #666; }
+        .stat-value { font-size: 14px; font-weight: bold; color: #333; }
         
-        .reason-box { margin-top: 12px; font-size: 14px; font-weight: normal; color: #444; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #e5c365; text-align: left; line-height: 1.5; }
-        .comfort-box { margin-top: 12px; font-size: 16px; font-weight: bold; color: #fff; background: #5cb85c; padding: 10px; border-radius: 6px; text-align: center; border: 2px solid #4cae4c; }
-        .backtest-box { margin-top: 12px; font-size: 13px; font-weight: normal; color: #555; border-top: 1px dashed #ccc; padding-top: 10px; display: flex; flex-direction: column; gap: 5px;}
+        .reason-box { margin-top: 8px; font-size: 13px; font-weight: normal; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #e5c365; text-align: left; }
+        .comfort-box { margin-top: 8px; font-size: 14px; font-weight: bold; color: #fff; background: #5cb85c; padding: 8px; border-radius: 6px; text-align: center; }
+        .backtest-box { margin-top: 8px; font-size: 12px; color: #555; border-top: 1px dashed #ccc; padding-top: 8px; display: flex; flex-direction: column; gap: 3px;}
     </style>
 </head>
 <body>
-
-    <h2 style="color: #333; text-align: center;">三珠路盲門計算器</h2>
 
     <div class="btn-group">
         <button class="btn-b" onclick="addRecord('B')">莊 (B)</button>
         <button class="btn-p" onclick="addRecord('P')">閒 (P)</button>
         <button class="btn-t" onclick="addRecord('T')">和 (T)</button>
     </div>
-    
-    <div class="btn-group">
-        <button class="btn-action" onclick="undo()">⬅ 退回一步</button>
-        <button class="btn-action" onclick="clearAll()">🗑 清空全部</button>
-    </div>
 
     <div class="bead-plate-container">
-        <h3 style="color: #444; margin-bottom: 10px;">珠盤路 (確認輸入)：</h3>
         <div id="beadPlate" class="bead-plate"></div>
     </div>
 
-    <div class="suggestion-box" id="suggestionArea">策略提示：資料不足。</div>
+    <div class="suggestion-box" id="suggestionArea">策略提示：資料不足</div>
 
-    <div class="result-box" id="resultArea">統計資料在此顯示。</div>
+    <div class="result-box" id="resultArea">資料不足</div>
+
+    <div class="btn-group" style="margin-bottom: 0;">
+        <button class="btn-action" onclick="undo()">⬅ 退回</button>
+        <button class="btn-action" onclick="clearAll()">🗑 清空</button>
+    </div>
 
     <script>
         let historyData = [];
@@ -99,8 +99,8 @@
             const suggestionArea = document.getElementById('suggestionArea');
 
             if (chunks.length === 0) {
-                resultArea.innerHTML = "<div style='text-align:center; color:#888;'>資料不足。</div>";
-                suggestionArea.innerHTML = "策略提示：資料收集中。";
+                resultArea.innerHTML = "<div style='text-align:center; color:#888;'>資料不足</div>";
+                suggestionArea.innerHTML = "策略提示：資料收集中";
                 return;
             }
 
@@ -115,9 +115,9 @@
             }
 
             const trendStats = {
-                '正式 (1,2,4)': stats[1] + stats[2] + stats[4],
-                '反/跳式 (2,3,4)': stats[2] + stats[3] + stats[4],
-                '連式 (1,2,3)': stats[1] + stats[2] + stats[3]
+                '正式(1,2,4)': stats[1] + stats[2] + stats[4],
+                '反/跳(2,3,4)': stats[2] + stats[3] + stats[4],
+                '連式(1,2,3)': stats[1] + stats[2] + stats[3]
             };
             
             let lastCodeStr = chunks[chunks.length - 1] || "";
@@ -126,14 +126,14 @@
 
             let isTrendChanging = false;
             let recentTopTrend = "";
-            if (chunks.length >= 5) {
+            if (chunks.length >= 4) {
                 let recentChunks = chunks.slice(-3);
                 let rStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
                 recentChunks.forEach(chunk => { rStats[codes[chunk]]++; });
                 let rTrendStats = {
-                    '正式 (1,2,4)': rStats[1] + rStats[2] + rStats[4],
-                    '反/跳式 (2,3,4)': rStats[2] + rStats[3] + rStats[4],
-                    '連式 (1,2,3)': rStats[1] + rStats[2] + rStats[3]
+                    '正式(1,2,4)': rStats[1] + rStats[2] + rStats[4],
+                    '反/跳(2,3,4)': rStats[2] + rStats[3] + rStats[4],
+                    '連式(1,2,3)': rStats[1] + rStats[2] + rStats[3]
                 };
                 let rLastCode = codes[recentChunks[recentChunks.length - 1]];
                 recentTopTrend = getTopTrend(rTrendStats, rLastCode);
@@ -143,94 +143,143 @@
             const maxCount = Math.max(...Object.values(stats));
             const wangMen = Object.keys(stats).filter(k => stats[k] === maxCount && maxCount > 0);
 
-            let html = `<div style="font-size:16px; margin-bottom:10px;">有效組數：<b>${chunks.length}</b> 組</div>`;
+            let html = `<div style="font-size:14px; margin-bottom:5px;">有效：<b>${chunks.length}</b> 組</div>`;
             html += `<div class="stats-grid">
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">1</div><div class="stat-name">三連</div></div><div class="stat-value">${stats[1]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">2</div><div class="stat-name">兩連一跳</div></div><div class="stat-value">${stats[2]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">3</div><div class="stat-name">一跳兩連</div></div><div class="stat-value">${stats[3]} 次</div></div>
-                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">4</div><div class="stat-name">單跳</div></div><div class="stat-value">${stats[4]} 次</div></div>
+                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">1</div><div class="stat-name">三連</div></div><div class="stat-value">${stats[1]}</div></div>
+                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">2</div><div class="stat-name">兩連一跳</div></div><div class="stat-value">${stats[2]}</div></div>
+                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">3</div><div class="stat-name">一跳兩連</div></div><div class="stat-value">${stats[3]}</div></div>
+                        <div class="stat-card"><div class="stat-info"><div class="stat-badge">4</div><div class="stat-name">單跳</div></div><div class="stat-value">${stats[4]}</div></div>
                      </div>`;
-            html += `<div class="trend-box"><div style="margin-bottom:8px;"><b>趨勢大勢：</b></div>`;
+            html += `<div class="trend-box"><b>趨勢：</b>`;
             for (let t in trendStats) { 
                 let isTop = (t === topTrend) ? "font-weight:bold; color:#d9534f;" : "";
-                html += `<div style="display:flex; justify-content:space-between; color:#555; ${isTop}"><span>${t}</span><span>${trendStats[t]} 次</span></div>`; 
+                html += `<div style="display:flex; justify-content:space-between; color:#555; ${isTop}"><span>${t}</span><span>${trendStats[t]}次</span></div>`; 
             }
-            html += `<hr style="border:0; border-top:1px solid #ccc; margin:10px 0;">`;
-            html += `<div><b>全局最強趨勢：</b> <span class="highlight">${topTrend}</span></div>`;
-            if (isTrendChanging) html += `<div style="margin-top:5px;"><span class="warning" style="font-size:14px; padding:3px 6px;">近3組急轉為：${recentTopTrend}</span></div>`;
+            html += `<hr style="border:0; border-top:1px solid #ccc; margin:5px 0;">`;
+            html += `<div><b>最強：</b> <span class="highlight">${topTrend}</span></div>`;
+            if (isTrendChanging) html += `<div style="margin-top:3px;"><span class="warning">近期轉為：${recentTopTrend}</span></div>`;
             html += `</div>`;
             resultArea.innerHTML = html;
 
+            // --- 精準回測邏輯 ---
             let simWins = 0, simLosses = 0; 
-            let comboPass = 0, comboFail = 0; 
-            for (let i = 3; i < chunks.length; i++) {
-                let pStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
-                for (let j = 0; j < i; j++) pStats[codes[chunks[j]]]++;
-                let pMax = Math.max(...Object.values(pStats));
-                let pWang = Object.keys(pStats).filter(k => pStats[k] === pMax);
-                let h1 = chunks[i][0], actualH2 = chunks[i][1], actualH3 = chunks[i][2];
-                let possible = new Set();
-                pWang.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
-                if (possible.size === 1) {
-                    let targetH2 = Array.from(possible)[0];
-                    if (targetH2 === actualH2) { simWins++; comboPass++; } 
-                    else { simLosses++; if (targetH2 === actualH3) comboPass++; else comboFail++; }
+            let comfortWins = 0, comfortLosses = 0; 
+            
+            if (!isBadStart) {
+                for (let i = 4; i < chunks.length; i++) {
+                    let pStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
+                    for (let j = 0; j < i; j++) pStats[codes[chunks[j]]]++;
+                    
+                    let pTrendStats = {
+                        '正式(1,2,4)': pStats[1] + pStats[2] + pStats[4],
+                        '反/跳(2,3,4)': pStats[2] + pStats[3] + pStats[4],
+                        '連式(1,2,3)': pStats[1] + pStats[2] + pStats[3]
+                    };
+                    let pLastCode = codes[chunks[i-1]];
+                    let pTopTrend = getTopTrend(pTrendStats, pLastCode);
+
+                    let pIsTrendChanging = false;
+                    if (i >= 4) {
+                        let recentChunks = [];
+                        for(let k = i-3; k < i; k++) recentChunks.push(chunks[k]);
+                        let rStats = { 1: 0, 2: 0, 3: 0, 4: 0 };
+                        recentChunks.forEach(c => rStats[codes[c]]++);
+                        let rTrendStats = {
+                            '正式(1,2,4)': rStats[1] + rStats[2] + rStats[4],
+                            '反/跳(2,3,4)': rStats[2] + rStats[3] + rStats[4],
+                            '連式(1,2,3)': rStats[1] + rStats[2] + rStats[3]
+                        };
+                        let rLastCode = codes[recentChunks[2]];
+                        let rTopTrend = getTopTrend(rTrendStats, rLastCode);
+                        if (rTopTrend !== pTopTrend) pIsTrendChanging = true;
+                    }
+
+                    let pMax = Math.max(...Object.values(pStats));
+                    let pWang = Object.keys(pStats).filter(k => pStats[k] === pMax);
+                    let h1 = chunks[i][0], actualH2 = chunks[i][1], actualH3 = chunks[i][2];
+                    let possible = new Set();
+                    pWang.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
+                    
+                    let predictedH2 = null;
+                    if (!pIsTrendChanging && possible.size === 1) {
+                        predictedH2 = Array.from(possible)[0];
+                        if (predictedH2 === actualH2) simWins++; else simLosses++;
+                    }
+
+                    let won2ndHit = (predictedH2 !== null && predictedH2 === actualH2);
+
+                    if (!won2ndHit) {
+                        let totalC = comfortWins + comfortLosses;
+                        let isCSafe = (totalC === 0 || (comfortWins / totalC) >= 0.5);
+                        
+                        if (h1 === actualH2 && pStats[1] === 0 && isCSafe) {
+                            if (actualH3 === (actualH2 === 'B' ? 'P' : 'B')) comfortWins++; else comfortLosses++;
+                        } else if (h1 !== actualH2 && pStats[4] === 0 && isCSafe) {
+                            if (actualH3 === (actualH2 === 'B' ? 'B' : 'P')) comfortWins++; else comfortLosses++;
+                        }
+                    }
                 }
             }
 
             const remainder = validData.length % 3;
             let suggestion = "";
-            const totalCombos = comboPass + comboFail;
-            const winRate2Val = totalCombos > 0 ? (comboPass / totalCombos) : 0;
+            const totalComfort = comfortWins + comfortLosses;
+            const winRate2Val = totalComfort > 0 ? (comfortWins / totalComfort) : 0;
+            const isComfortZoneSafe = (winRate2Val >= 0.5 || totalComfort === 0);
             
-            const isComfortZoneSafe = (winRate2Val >= 0.5 || totalCombos === 0);
-            
-            if (chunks.length < 4) {
-                suggestion = `資料收集中 (${chunks.length}/4 組)`;
-            } else if (isBadStart) {
-                suggestion = "<span class='warning'>⚠️ 前4組1~4全開，開局牌路混亂建議離場</span>";
-            } else if (remainder === 1) {
-                if (isTrendChanging) {
-                    suggestion = "<span class='warning'>⚠️ 勢變發生，趨勢衝突建議停注</span>";
-                } else {
+            if (chunks.length < 4) { suggestion = `收集中 (${chunks.length}/4)`; } 
+            else if (isBadStart) { suggestion = "<span class='warning'>⚠️ 前4組1~4全開，建議離場</span>"; } 
+            else if (remainder === 1) {
+                if (isTrendChanging) { suggestion = "<span class='warning'>⚠️ 勢變衝突，暫停</span>"; } 
+                else {
                     const h1 = validData[validData.length - 1];
                     let possible = new Set();
                     wangMen.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
                     if (possible.size === 1) {
-                        const side = Array.from(possible)[0];
-                        const sideStr = side === 'B' ? "<span style='color:#cc0000; font-size:24px;'>下注：莊 (B)</span>" : "<span style='color:#0055cc; font-size:24px;'>下注：閒 (P)</span>";
-                        suggestion = `${sideStr}<div class="reason-box"><b>💡 推導邏輯：</b>符合「${topTrend}」規律。</div>`;
-                    } else { suggestion = "旺門方向衝突，觀察"; }
+                        const side = Array.from(possible)[0], sideStr = side === 'B' ? "<span style='color:#cc0000; font-size:22px;'>下注：莊 (B)</span>" : "<span style='color:#0055cc; font-size:22px;'>下注：閒 (P)</span>";
+                        suggestion = `${sideStr}<div class="reason-box"><b>💡 邏輯：</b>符合「${topTrend}」。</div>`;
+                    } else { suggestion = "方向衝突，觀察"; }
                 }
             } else if (remainder === 2) {
                 const h1 = validData[validData.length - 2];
                 const h2 = validData[validData.length - 1];
-                let comfortSuggestion = "";
                 
-                if (h1 === h2 && stats[1] === 0 && isComfortZoneSafe) {
-                    const target = h2 === 'B' ? 'P' : 'B';
-                    const targetStr = target === 'B' ? '莊 (B)' : '閒 (P)';
-                    comfortSuggestion = `<div class="comfort-box">🛡️ 第三口舒適區：下注 ${targetStr}<br><small>原因：三連(1)為盲門，此列斷連機率高</small></div>`;
+                let possibleH2 = new Set();
+                wangMen.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possibleH2.add(p[1]); }); });
+                let predictedH2 = (!isTrendChanging && possibleH2.size === 1) ? Array.from(possibleH2)[0] : null;
+
+                if (predictedH2 === h2) {
+                    suggestion = "<span style='color:#008000;'>🎉 第二口已獲利，本列收工觀察</span>";
+                } else {
+                    let comfortSuggestion = "";
+                    
+                    // UX體驗升級：加入鎖定提示，避免使用者恐慌
+                    if (h1 === h2 && stats[1] === 0) {
+                        if (isComfortZoneSafe) {
+                            comfortSuggestion = `<div class="comfort-box">🛡️ 舒適區：下注 ${h2 === 'B' ? '閒 (P)' : '莊 (B)'}<br><small>代碼1盲門，斷連機率高</small></div>`;
+                        } else {
+                            comfortSuggestion = "<span style='color:#888;'>已過第二口，觀察 <br><small>⚠️ 舒適區勝率過低，系統已鎖定保護</small></span>";
+                        }
+                    } else if (h1 !== h2 && stats[4] === 0) {
+                        if (isComfortZoneSafe) {
+                            comfortSuggestion = `<div class="comfort-box">🛡️ 舒適區：下注 ${h2 === 'B' ? '莊 (B)' : '閒 (P)'}<br><small>代碼4盲門，黏住機率高</small></div>`;
+                        } else {
+                            comfortSuggestion = "<span style='color:#888;'>已過第二口，觀察 <br><small>⚠️ 舒適區勝率過低，系統已鎖定保護</small></span>";
+                        }
+                    }
+                    
+                    suggestion = comfortSuggestion || "已過第二口，觀察";
                 }
-                else if (h1 !== h2 && stats[4] === 0 && isComfortZoneSafe) {
-                    const target = h2 === 'B' ? 'B' : 'P';
-                    const targetStr = target === 'B' ? '莊 (B)' : '閒 (P)';
-                    comfortSuggestion = `<div class="comfort-box">🛡️ 第三口舒適區：下注 ${targetStr}<br><small>原因：單跳(4)為盲門，此列黏住機率高</small></div>`;
-                }
-                
-                suggestion = comfortSuggestion || "已過第二口，觀察不下注";
-            } else {
-                suggestion = "新列第 1 口，觀察";
-            }
+            } else { suggestion = "新列第 1 口，觀察"; }
 
             const winRate1 = (simWins+simLosses) > 0 ? ((simWins/(simWins+simLosses))*100).toFixed(1)+"%" : "---";
-            const winRate2 = (comboPass+comboFail) > 0 ? ((comboPass/(comboPass+comboFail))*100).toFixed(1)+"%" : "---";
+            const winRate2 = (comfortWins+comfortLosses) > 0 ? ((comfortWins/(comfortWins+comfortLosses))*100).toFixed(1)+"%" : "---";
 
-            suggestionArea.innerHTML = `<div style="margin-bottom:8px; color:#555; font-size:16px;">策略提示：</div>
+            suggestionArea.innerHTML = `<div style="margin-bottom:5px; color:#555; font-size:14px;">策略提示：</div>
                                         <div>${suggestion}</div>
                                         <div class="backtest-box">
-                                            <div>📍 <b>只打第二口：</b> ${simWins}勝 ${simLosses}負 (${winRate1})</div>
-                                            <div>⚠️ <b>打二三口(負追)：</b> ${comboPass}過關 <span style="color:#d9534f; font-weight:bold;">${comboFail}破列</span> (${winRate2})</div>
+                                            <div>📍 <b>建議第二口：</b> ${simWins}勝 ${simLosses}負 (${winRate1})</div>
+                                            <div>🛡️ <b>舒適區第三口：</b> ${comfortWins}勝 <span style="color:#d9534f; font-weight:bold;">${comfortLosses}負</span> (${winRate2})</div>
                                         </div>`;
         }
     </script>
