@@ -5,45 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三珠路計算器</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 5px 10px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
+        body { font-family: Arial, sans-serif; padding: 2px 4px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
         
-        .btn-group { display: flex; gap: 8px; margin-bottom: 10px; }
-        button { font-weight: bold; cursor: pointer; border: 1px solid #ccc; border-radius: 8px; flex: 1; transition: 0.2s; }
+        .btn-group { display: flex; gap: 5px; margin-top: 4px; margin-bottom: 6px; }
+        button { font-weight: bold; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; flex: 1; transition: 0.1s; }
         button:active { transform: scale(0.98); }
         
-        .btn-b { background-color: #ffcccc; color: #cc0000; border-color: #ff9999; padding: 22px 10px; font-size: 22px; }
-        .btn-p { background-color: #cce5ff; color: #0055cc; border-color: #99ccff; padding: 22px 10px; font-size: 22px; }
-        .btn-t { background-color: #ccffcc; color: #008000; border-color: #99ff99; padding: 22px 10px; font-size: 20px; }
-        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; padding: 12px; font-size: 15px; }
+        .btn-b { background-color: #ffcccc; color: #cc0000; border-color: #ff9999; padding: 18px 5px; font-size: 22px; }
+        .btn-p { background-color: #cce5ff; color: #0055cc; border-color: #99ccff; padding: 18px 5px; font-size: 22px; }
+        .btn-t { background-color: #ccffcc; color: #008000; border-color: #99ff99; padding: 18px 5px; font-size: 18px; }
+        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; padding: 10px; font-size: 15px; }
         
-        .bead-plate-container { margin-bottom: 10px; }
+        .bead-plate-container { margin-bottom: 6px; }
         .bead-plate {
-            display: grid; grid-template-rows: repeat(6, 30px); grid-auto-columns: 30px;
+            display: grid; grid-template-rows: repeat(6, 28px); grid-auto-columns: 28px;
             grid-auto-flow: column; gap: 2px; overflow-x: auto; border: 1px solid #bbb;
-            padding: 5px; background: #fff; min-height: 194px; border-radius: 8px; box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            padding: 4px; background: #fff; min-height: 180px; border-radius: 6px; box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
         }
-        .bead { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; }
+        .bead { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; }
         .bead-B { background-color: #d9534f; }
         .bead-P { background-color: #0275d8; }
         .bead-T { background-color: #5cb85c; }
 
-        .suggestion-box { background-color: #fffbc8; border: 2px solid #ffca28; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 10px; }
-        .result-box { background-color: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; line-height: 1.4; margin-bottom: 10px; font-size: 14px; }
+        .suggestion-box { background-color: #fffbc8; border: 2px solid #ffca28; padding: 8px; border-radius: 6px; font-size: 15px; font-weight: bold; text-align: center; margin-bottom: 6px; }
+        .result-box { background-color: #fff; border: 1px solid #ddd; padding: 8px; border-radius: 6px; line-height: 1.3; margin-bottom: 6px; font-size: 13px; }
         
         .highlight { font-weight: bold; color: #d9534f; }
-        .warning { color: white; background-color: #d9534f; padding: 2px 5px; border-radius: 4px; display: inline-block; font-size: 13px;}
-        .trend-box { font-size: 13px; color: #333; background: #eef2f5; padding: 8px; border-radius: 8px; margin-top: 8px; border: 1px solid #d0d7de; }
+        .warning { color: white; background-color: #d9534f; padding: 2px 4px; border-radius: 4px; display: inline-block; font-size: 12px;}
+        .trend-box { background: #eef2f5; padding: 6px; border-radius: 6px; margin-top: 6px; border: 1px solid #d0d7de; }
         
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
-        .stat-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px; display: flex; align-items: center; justify-content: space-between; }
-        .stat-info { display: flex; align-items: center; gap: 6px; }
-        .stat-badge { background: #444; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 4px 0; }
+        .stat-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 4px; display: flex; align-items: center; justify-content: space-between; }
+        .stat-info { display: flex; align-items: center; gap: 4px; }
+        .stat-badge { background: #444; color: #fff; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; }
         .stat-name { font-size: 12px; color: #666; }
-        .stat-value { font-size: 14px; font-weight: bold; color: #333; }
+        .stat-value { font-size: 13px; font-weight: bold; color: #333; }
         
-        .reason-box { margin-top: 8px; font-size: 13px; font-weight: normal; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #e5c365; text-align: left; }
-        .comfort-box { margin-top: 8px; font-size: 14px; font-weight: bold; color: #fff; background: #5cb85c; padding: 8px; border-radius: 6px; text-align: center; }
-        .backtest-box { margin-top: 8px; font-size: 12px; color: #555; border-top: 1px dashed #ccc; padding-top: 8px; display: flex; flex-direction: column; gap: 3px;}
+        .reason-box { margin-top: 6px; font-size: 12px; background: #fff; padding: 6px; border-radius: 4px; border: 1px solid #e5c365; text-align: left; }
+        .comfort-box { margin-top: 6px; font-size: 13px; font-weight: bold; color: #fff; background: #5cb85c; padding: 6px; border-radius: 4px; text-align: center; }
+        .backtest-box { margin-top: 6px; font-size: 12px; color: #555; border-top: 1px dashed #ccc; padding-top: 6px; display: flex; flex-direction: column; gap: 2px;}
     </style>
 </head>
 <body>
@@ -62,7 +62,7 @@
 
     <div class="result-box" id="resultArea">資料不足</div>
 
-    <div class="btn-group" style="margin-bottom: 0;">
+    <div class="btn-group" style="margin-bottom: 2px;">
         <button class="btn-action" onclick="undo()">⬅ 退回</button>
         <button class="btn-action" onclick="clearAll()">🗑 清空</button>
     </div>
@@ -143,7 +143,7 @@
             const maxCount = Math.max(...Object.values(stats));
             const wangMen = Object.keys(stats).filter(k => stats[k] === maxCount && maxCount > 0);
 
-            let html = `<div style="font-size:14px; margin-bottom:5px;">有效：<b>${chunks.length}</b> 組</div>`;
+            let html = `<div style="font-size:13px; margin-bottom:4px;">有效：<b>${chunks.length}</b> 組</div>`;
             html += `<div class="stats-grid">
                         <div class="stat-card"><div class="stat-info"><div class="stat-badge">1</div><div class="stat-name">三連</div></div><div class="stat-value">${stats[1]}</div></div>
                         <div class="stat-card"><div class="stat-info"><div class="stat-badge">2</div><div class="stat-name">兩連一跳</div></div><div class="stat-value">${stats[2]}</div></div>
@@ -155,13 +155,12 @@
                 let isTop = (t === topTrend) ? "font-weight:bold; color:#d9534f;" : "";
                 html += `<div style="display:flex; justify-content:space-between; color:#555; ${isTop}"><span>${t}</span><span>${trendStats[t]}次</span></div>`; 
             }
-            html += `<hr style="border:0; border-top:1px solid #ccc; margin:5px 0;">`;
+            html += `<hr style="border:0; border-top:1px solid #ccc; margin:4px 0;">`;
             html += `<div><b>最強：</b> <span class="highlight">${topTrend}</span></div>`;
-            if (isTrendChanging) html += `<div style="margin-top:3px;"><span class="warning">近期轉為：${recentTopTrend}</span></div>`;
+            if (isTrendChanging) html += `<div style="margin-top:2px;"><span class="warning">近期轉為：${recentTopTrend}</span></div>`;
             html += `</div>`;
             resultArea.innerHTML = html;
 
-            // --- 精準回測邏輯 ---
             let simWins = 0, simLosses = 0; 
             let comfortWins = 0, comfortLosses = 0; 
             
@@ -252,8 +251,6 @@
                     suggestion = "<span style='color:#008000;'>🎉 第二口已獲利，本列收工觀察</span>";
                 } else {
                     let comfortSuggestion = "";
-                    
-                    // UX體驗升級：加入鎖定提示，避免使用者恐慌
                     if (h1 === h2 && stats[1] === 0) {
                         if (isComfortZoneSafe) {
                             comfortSuggestion = `<div class="comfort-box">🛡️ 舒適區：下注 ${h2 === 'B' ? '閒 (P)' : '莊 (B)'}<br><small>代碼1盲門，斷連機率高</small></div>`;
@@ -267,7 +264,6 @@
                             comfortSuggestion = "<span style='color:#888;'>已過第二口，觀察 <br><small>⚠️ 舒適區勝率過低，系統已鎖定保護</small></span>";
                         }
                     }
-                    
                     suggestion = comfortSuggestion || "已過第二口，觀察";
                 }
             } else { suggestion = "新列第 1 口，觀察"; }
@@ -275,7 +271,7 @@
             const winRate1 = (simWins+simLosses) > 0 ? ((simWins/(simWins+simLosses))*100).toFixed(1)+"%" : "---";
             const winRate2 = (comfortWins+comfortLosses) > 0 ? ((comfortWins/(comfortWins+comfortLosses))*100).toFixed(1)+"%" : "---";
 
-            suggestionArea.innerHTML = `<div style="margin-bottom:5px; color:#555; font-size:14px;">策略提示：</div>
+            suggestionArea.innerHTML = `<div style="margin-bottom:4px; color:#555; font-size:13px;">策略提示：</div>
                                         <div>${suggestion}</div>
                                         <div class="backtest-box">
                                             <div>📍 <b>建議第二口：</b> ${simWins}勝 ${simLosses}負 (${winRate1})</div>
