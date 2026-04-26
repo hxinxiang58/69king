@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三珠路計算器</title>
+    <title>三珠路</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 2px 4px; max-width: 500px; margin: 0 auto; background-color: #e8f5e9; }
         
@@ -14,7 +14,8 @@
         .btn-b { background-color: #ffcccc; color: #cc0000; border-color: #ff9999; padding: 18px 5px; font-size: 22px; }
         .btn-p { background-color: #cce5ff; color: #0055cc; border-color: #99ccff; padding: 18px 5px; font-size: 22px; }
         .btn-t { background-color: #ccffcc; color: #008000; border-color: #99ff99; padding: 18px 5px; font-size: 18px; }
-        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; padding: 10px; font-size: 15px; }
+        .btn-action { background-color: #e0e0e0; color: #333; border-color: #ccc; padding: 10px; font-size: 14px; }
+        .btn-offset-on { background-color: #ffca28 !important; border-color: #f5b041 !important; color: #333 !important;}
         
         .bead-plate-container { margin-bottom: 6px; }
         .bead-plate {
@@ -58,23 +59,46 @@
         <div id="beadPlate" class="bead-plate"></div>
     </div>
 
-    <div class="suggestion-box" id="suggestionArea">策略提示：資料不足</div>
+    <div class="suggestion-box" id="suggestionArea">資料收集中...</div>
 
     <div class="result-box" id="resultArea">資料不足</div>
 
     <div class="btn-group" style="margin-bottom: 2px;">
         <button class="btn-action" onclick="undo()">⬅ 退回</button>
+        <button class="btn-action" id="offsetBtn" onclick="toggleOffset()">🔄 偏移(關)</button>
         <button class="btn-action" onclick="clearAll()">🗑 清空</button>
     </div>
 
     <script>
         let historyData = [];
+        let isOffset = false;
         const codes = { 'BBB': 1, 'PPP': 1, 'BBP': 2, 'PPB': 2, 'BPP': 3, 'PBB': 3, 'BPB': 4, 'PBP': 4 };
         const patternMap = { 1: ['BBB', 'PPP'], 2: ['BBP', 'PPB'], 3: ['BPP', 'PBB'], 4: ['BPB', 'PBP'] };
 
         function addRecord(type) { historyData.push(type); updateUI(); }
         function undo() { if (historyData.length > 0) { historyData.pop(); updateUI(); } }
-        function clearAll() { historyData = []; updateUI(); }
+        
+        function clearAll() { 
+            historyData = []; 
+            isOffset = false;
+            const btn = document.getElementById('offsetBtn');
+            btn.innerText = '🔄 偏移(關)';
+            btn.classList.remove('btn-offset-on');
+            updateUI(); 
+        }
+        
+        function toggleOffset() {
+            isOffset = !isOffset;
+            const btn = document.getElementById('offsetBtn');
+            if (isOffset) {
+                btn.innerText = '🔄 偏移(開)';
+                btn.classList.add('btn-offset-on');
+            } else {
+                btn.innerText = '🔄 偏移(關)';
+                btn.classList.remove('btn-offset-on');
+            }
+            updateUI();
+        }
 
         function getTopTrend(trendStatsObj, lastCode) {
             let maxVal = Math.max(...Object.values(trendStatsObj));
@@ -86,13 +110,25 @@
 
         function updateUI() {
             const beadPlate = document.getElementById('beadPlate');
-            beadPlate.innerHTML = historyData.map(item => `<div class="bead bead-${item}">${item === 'B' ? '莊' : item === 'P' ? '閒' : '和'}</div>`).join('');
+            let bpCount = 0;
+            beadPlate.innerHTML = historyData.map(item => {
+                let opacity = "1";
+                if (item === 'B' || item === 'P') {
+                    bpCount++;
+                    if (isOffset && bpCount === 1) opacity = "0.3";
+                } else if (item === 'T') {
+                    if (isOffset && bpCount <= 1) opacity = "0.3";
+                }
+                return `<div class="bead bead-${item}" style="opacity:${opacity}">${item === 'B' ? '莊' : item === 'P' ? '閒' : '和'}</div>`;
+            }).join('');
             beadPlate.scrollLeft = beadPlate.scrollWidth;
 
             const validData = historyData.filter(item => item === 'B' || item === 'P');
+            const calcData = isOffset ? validData.slice(1) : validData;
+
             let chunks = [];
-            for (let i = 0; i <= validData.length - 3; i += 3) {
-                chunks.push(validData[i] + validData[i+1] + validData[i+2]);
+            for (let i = 0; i <= calcData.length - 3; i += 3) {
+                chunks.push(calcData[i] + calcData[i+1] + calcData[i+2]);
             }
 
             const resultArea = document.getElementById('resultArea');
@@ -100,7 +136,7 @@
 
             if (chunks.length === 0) {
                 resultArea.innerHTML = "<div style='text-align:center; color:#888;'>資料不足</div>";
-                suggestionArea.innerHTML = "策略提示：資料收集中";
+                suggestionArea.innerHTML = "資料收集中...";
                 return;
             }
 
@@ -143,7 +179,7 @@
             const maxCount = Math.max(...Object.values(stats));
             const wangMen = Object.keys(stats).filter(k => stats[k] === maxCount && maxCount > 0);
 
-            let html = `<div style="font-size:13px; margin-bottom:4px;">有效：<b>${chunks.length}</b> 組</div>`;
+            let html = `<div style="font-size:13px; margin-bottom:4px;">有效：<b>${chunks.length}</b> 組 ${isOffset ? "<span style='color:#f5b041;'>(偏移中)</span>" : ""}</div>`;
             html += `<div class="stats-grid">
                         <div class="stat-card"><div class="stat-info"><div class="stat-badge">1</div><div class="stat-name">三連</div></div><div class="stat-value">${stats[1]}</div></div>
                         <div class="stat-card"><div class="stat-info"><div class="stat-badge">2</div><div class="stat-name">兩連一跳</div></div><div class="stat-value">${stats[2]}</div></div>
@@ -208,47 +244,57 @@
                     let won2ndHit = (predictedH2 !== null && predictedH2 === actualH2);
 
                     if (!won2ndHit) {
-                        let totalC = comfortWins + comfortLosses;
-                        let isCSafe = (totalC === 0 || (comfortWins / totalC) >= 0.5);
-                        
-                        if (h1 === actualH2 && pStats[1] === 0 && isCSafe) {
+                        if (h1 === actualH2 && pStats[1] === 0) {
                             if (actualH3 === (actualH2 === 'B' ? 'P' : 'B')) comfortWins++; else comfortLosses++;
-                        } else if (h1 !== actualH2 && pStats[4] === 0 && isCSafe) {
+                        } else if (h1 !== actualH2 && pStats[4] === 0) {
                             if (actualH3 === (actualH2 === 'B' ? 'B' : 'P')) comfortWins++; else comfortLosses++;
                         }
                     }
                 }
             }
 
-            const remainder = validData.length % 3;
+            const remainder = calcData.length % 3;
             let suggestion = "";
             const totalComfort = comfortWins + comfortLosses;
             const winRate2Val = totalComfort > 0 ? (comfortWins / totalComfort) : 0;
-            const isComfortZoneSafe = (winRate2Val >= 0.5 || totalComfort === 0);
+            const isComfortZoneSafe = (totalComfort === 0 || winRate2Val >= 0.5);
+            
+            const totalSim = simWins + simLosses;
+            const isMainSafe = (totalSim < 3 || (simWins / totalSim) >= 0.4); 
             
             if (chunks.length < 4) { suggestion = `收集中 (${chunks.length}/4)`; } 
             else if (isBadStart) { suggestion = "<span class='warning'>⚠️ 前4組1~4全開，建議離場</span>"; } 
             else if (remainder === 1) {
                 if (isTrendChanging) { suggestion = "<span class='warning'>⚠️ 勢變衝突，暫停</span>"; } 
                 else {
-                    const h1 = validData[validData.length - 1];
+                    const h1 = calcData[calcData.length - 1];
                     let possible = new Set();
                     wangMen.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possible.add(p[1]); }); });
                     if (possible.size === 1) {
-                        const side = Array.from(possible)[0], sideStr = side === 'B' ? "<span style='color:#cc0000; font-size:22px;'>下注：莊 (B)</span>" : "<span style='color:#0055cc; font-size:22px;'>下注：閒 (P)</span>";
-                        suggestion = `${sideStr}<div class="reason-box"><b>💡 邏輯：</b>符合「${topTrend}」。</div>`;
+                        if (isMainSafe) {
+                            const side = Array.from(possible)[0], sideStr = side === 'B' ? "<span style='color:#cc0000; font-size:22px;'>下注：莊 (B)</span>" : "<span style='color:#0055cc; font-size:22px;'>下注：閒 (P)</span>";
+                            const codeSrc = wangMen.join(', ');
+                            suggestion = `${sideStr}<div class="reason-box"><b>💡 邏輯：</b>符合旺門代碼 ${codeSrc}。</div>`;
+                        } else {
+                            suggestion = "<span style='color:#888;'>符合旺門，暫停下注 <br><small>⚠️ 主策略連敗勝率過低，系統已鎖定</small></span>";
+                        }
                     } else { suggestion = "方向衝突，觀察"; }
                 }
             } else if (remainder === 2) {
-                const h1 = validData[validData.length - 2];
-                const h2 = validData[validData.length - 1];
+                const h1 = calcData[calcData.length - 2];
+                const h2 = calcData[calcData.length - 1];
                 
                 let possibleH2 = new Set();
                 wangMen.forEach(c => { patternMap[c].forEach(p => { if (p[0] === h1) possibleH2.add(p[1]); }); });
+                
                 let predictedH2 = (!isTrendChanging && possibleH2.size === 1) ? Array.from(possibleH2)[0] : null;
 
                 if (predictedH2 === h2) {
-                    suggestion = "<span style='color:#008000;'>🎉 第二口已獲利，本列收工觀察</span>";
+                    if (isMainSafe) {
+                        suggestion = "<span style='color:#008000;'>🎉 第二口已獲利，本列收工觀察</span>";
+                    } else {
+                        suggestion = "<span style='color:#888;'>✅ 第二口虛擬命中，本列收工觀察</span>";
+                    }
                 } else {
                     let comfortSuggestion = "";
                     if (h1 === h2 && stats[1] === 0) {
@@ -271,8 +317,7 @@
             const winRate1 = (simWins+simLosses) > 0 ? ((simWins/(simWins+simLosses))*100).toFixed(1)+"%" : "---";
             const winRate2 = (comfortWins+comfortLosses) > 0 ? ((comfortWins/(comfortWins+comfortLosses))*100).toFixed(1)+"%" : "---";
 
-            suggestionArea.innerHTML = `<div style="margin-bottom:4px; color:#555; font-size:13px;">策略提示：</div>
-                                        <div>${suggestion}</div>
+            suggestionArea.innerHTML = `<div>${suggestion}</div>
                                         <div class="backtest-box">
                                             <div>📍 <b>建議第二口：</b> ${simWins}勝 ${simLosses}負 (${winRate1})</div>
                                             <div>🛡️ <b>舒適區第三口：</b> ${comfortWins}勝 <span style="color:#d9534f; font-weight:bold;">${comfortLosses}負</span> (${winRate2})</div>
